@@ -1,0 +1,98 @@
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="color-scheme" content="light"><title>LENS | Liver Assessment Calculator</title>
+<style>
+:root{--ink:#21352f;--muted:#64726e;--line:#e3eae6;--mint:#B3E2CD;--lavender:#CBD5E8;--peach:#FDCDAC}
+*{box-sizing:border-box}body{margin:0;padding:42px 20px;background:#f5f7f5;color:var(--ink);font-family:Inter,"Segoe UI",Arial,sans-serif;font-size:15px;line-height:1.5}
+main{max-width:900px;margin:auto}header{display:flex;align-items:center;justify-content:space-between;gap:18px;margin-bottom:25px}.brand{font-size:31px;letter-spacing:-1px;font-weight:750}.subtitle{margin:1px 0 0;color:var(--muted);font-size:14px}.research{font-size:11px;text-transform:uppercase;letter-spacing:1.4px;border:1px solid #d7e0da;border-radius:20px;padding:7px 12px;white-space:nowrap}
+.card{background:white;border:1px solid var(--line);border-radius:19px;padding:26px;box-shadow:0 5px 22px #203d2d04}.formhead{display:flex;justify-content:space-between;align-items:center;margin-bottom:19px}h1{font-size:17px;margin:0;font-weight:650}button{font:inherit;background:transparent;border:0;color:var(--muted);padding:5px;cursor:pointer}button:hover{color:var(--ink);text-decoration:underline}.fields{display:grid;grid-template-columns:repeat(4,1fr);gap:18px}label{display:block;font-size:13px;font-weight:600}.unit{font-size:11px;font-weight:400;color:var(--muted);display:block;margin-top:2px;min-height:17px}input,select{margin-top:7px;width:100%;height:46px;border:1px solid #d7e0db;border-radius:9px;background:#fbfcfb;padding:10px 11px;color:var(--ink);font:inherit}input:focus,select:focus{outline:3px solid #b3e2cd66;border-color:#75aa90}input::placeholder{color:#a0aaa5}.sex label .unit{visibility:hidden}
+.results{display:grid;grid-template-columns:1fr 1fr;gap:17px;margin-top:20px}.result{background:white;border:1px solid var(--line);border-top:4px solid var(--mint);border-radius:15px;padding:20px 23px}.result.lens{border-top-color:var(--lavender)}.resulthead{display:flex;align-items:center;justify-content:space-between;gap:8px;font-size:15px;font-weight:650}.flag{font-size:11px;font-weight:400;color:var(--muted);text-align:right}.score{font-size:44px;font-weight:650;line-height:1.2;letter-spacing:-1.4px;margin:13px 0 10px;font-variant-numeric:tabular-nums;overflow-wrap:anywhere}.reference{color:var(--muted);font-size:12px;margin:0}.advice{margin-top:18px;padding:21px 24px;background:#edf2ef;border:1px solid #dbe5df;border-radius:15px}.advice[data-state="recommend"]{background:#e7f4ed;border-color:#bfddcb}.advice[data-state="empty"]{background:#f0f2f1}.advicehead{display:flex;justify-content:space-between;align-items:center;gap:15px}.advice h2{font-size:17px;font-weight:650;margin:0}.tag{font-size:11px;font-weight:650;white-space:nowrap;padding:5px 10px;border-radius:15px;background:white;border:1px solid #d4dfd8}.tag:before{content:'●';font-size:8px;color:#537c66;margin-right:6px}.advice p{font-size:13px;color:#53665c;margin:7px 0 0}footer{margin-top:18px;padding:0 3px;color:var(--muted);font-size:11px;line-height:1.7}footer p{margin:4px 0}
+@media(max-width:720px){body{padding:25px 14px}.fields{grid-template-columns:repeat(2,1fr)}.card{padding:20px}.advicehead{align-items:flex-start}.advice h2{font-size:15px}}@media(max-width:420px){.results{grid-template-columns:1fr}.brand{font-size:28px}.research{font-size:9px;padding:6px 8px}.advicehead{flex-direction:column;gap:8px}}
+@media print{body{background:white;padding:0}.card,.result,.advice{box-shadow:none;break-inside:avoid}#reset{display:none}}
+</style></head><body><main>
+<header><div><div class="brand">LENS</div><p class="subtitle">Liver Assessment Calculator</p></div><span class="research">Research use</span></header>
+<section class="card" aria-labelledby="inputTitle"><div class="formhead"><h1 id="inputTitle">Patient values</h1><button id="reset" type="button">Clear</button></div>
+<div class="fields">
+<div><label for="age">Age<span class="unit">years · 35 or older</span></label><input id="age" type="number" inputmode="decimal" min="35" step="any" placeholder="—" autocomplete="off"></div>
+<div class="sex"><label for="female">Sex<span class="unit">Recorded sex</span></label><select id="female"><option value="">Select</option><option value="1">Female</option><option value="0">Male</option></select></div>
+<div><label for="bmi">BMI<span class="unit">kg/m²</span></label><input id="bmi" type="number" inputmode="decimal" min="0.1" step="any" placeholder="—" autocomplete="off"></div>
+<div><label for="hba1c">HbA1c<span class="unit">%</span></label><input id="hba1c" type="number" inputmode="decimal" min="0.1" step="any" placeholder="—" autocomplete="off"></div>
+<div><label for="ast">AST<span class="unit">U/L</span></label><input id="ast" type="number" inputmode="decimal" min="0.1" step="any" placeholder="—" autocomplete="off"></div>
+<div><label for="alt">ALT<span class="unit">U/L</span></label><input id="alt" type="number" inputmode="decimal" min="0.1" step="any" placeholder="—" autocomplete="off"></div>
+<div><label for="platelets">Platelet count<span class="unit">×10⁹/L</span></label><input id="platelets" type="number" inputmode="decimal" min="0.1" step="any" placeholder="—" autocomplete="off"></div>
+</div></section>
+<div class="results" aria-live="polite"><section class="result"><div class="resulthead"><span>FIB-4</span><span id="fib4Flag" class="flag"></span></div><div id="fib4Value" class="score">—</div><p id="fib4Reference" class="reference"></p></section>
+<section class="result lens"><div class="resulthead"><span>LENS score</span><span id="lensFlag" class="flag"></span></div><div id="lensValue" class="score">—</div><p id="lensReference" class="reference"></p></section></div>
+<section id="advice" class="advice" data-state="empty" aria-live="polite"><div class="advicehead"><h2 id="adviceTitle"></h2><span id="sourceTag" class="tag" hidden></span></div><p id="adviceDetail"></p></section>
+<footer><p>LENS: Liver Evaluation and Navigation for Screening. LENS score = LENS-Base probability × 100 (range 0–100).</p>
+<p>For adults with cardiometabolic risk. LENS adds assessment for women; FIB-4 applies to women and men. The model estimates MASLD with elevated liver stiffness (MASLD-ELS: CAP ≥288 dB/m and LSM ≥8 kPa).</p>
+<p>Reference values are study assessment thresholds, not diagnostic cutoffs. Calculations run locally; entered values are not stored or transmitted.</p></footer>
+</main><script>const MODEL = {"intercept": -9.09683436826056, "log_fib4": 1.27368764195543, "curves": {"age": {"knots": [35, 50, 65, 80], "coefficients": [-0.05122228529699026, 0.05838197431925041, -0.16129439508013282]}, "bmi": {"knots": [15, 30, 40, 65], "coefficients": [0.2844731808862046, -0.18640805405024383, 0.03609690757731788]}, "hba1c": {"knots": [3.5, 6.5, 14], "coefficients": [1.25874340029409, -2.0330885558251235]}}, "method": "Exact algebraic change of spline basis; no refitting"};
+
+const CUTOFF = 0.139;
+function spline(x, spec) {
+  const k=spec.knots, c=spec.coefficients, K=k.length, plus=v=>Math.max(v,0)**3;
+  let y=c[0]*(x-k[0]);
+  for(let j=0;j<K-2;j++) {
+    const h=(plus(x-k[j])-(k[K-1]-k[j])/(k[K-1]-k[K-2])*plus(x-k[K-2])+(k[K-2]-k[j])/(k[K-1]-k[K-2])*plus(x-k[K-1]))/(k[K-1]-k[0])**2;
+    y+=c[j+1]*h;
+  }
+  return y;
+}
+function classify(female, fib4, threshold, probability) {
+  const byFib4=fib4>=threshold, byLens=female===1&&probability>=CUTOFF;
+  return {byFib4,byLens,recommend:byFib4||byLens,added:byLens&&!byFib4,
+    source:byFib4&&byLens?'Both':byFib4?'FIB-4':byLens?'LENS':'Neither'};
+}
+function evaluate(z) {
+  for(const k of ['age','bmi','hba1c','ast','alt','platelets'])
+    if(!Number.isFinite(z[k])||z[k]<=0)throw Error('Enter a positive number in every field.');
+  if(z.age<35)throw Error('This study rule applies to adults aged 35 years or older.');
+  if(![0,1].includes(z.female))throw Error('Select sex.');
+  const fib4=z.age*z.ast/(z.platelets*Math.sqrt(z.alt)),threshold=z.age>65?2:1.3;
+  let eta=MODEL.intercept+MODEL.log_fib4*Math.log(fib4);
+  for(const k of ['age','bmi','hba1c'])eta+=spline(z[k],MODEL.curves[k]);
+  if(!Number.isFinite(fib4)||fib4<=0||!Number.isFinite(eta))throw Error('Check the entered values and units.');
+  const probability=eta>=0?1/(1+Math.exp(-eta)):Math.exp(eta)/(1+Math.exp(eta));
+  return {fib4,threshold,probability,score:100*probability,...classify(z.female,fib4,threshold,probability)};
+}
+function boundaryFormat(value, threshold, minDigits) {
+  let n=minDigits;
+  while(n<14&&((Number(value.toFixed(n))>=threshold)!==(value>=threshold)))n++;
+  return value.toFixed(n);
+}
+
+const ids=['age','female','bmi','hba1c','ast','alt','platelets'];
+const $=id=>document.getElementById(id);
+function clearResults(message='Enter all values to see the results.') {
+  $('fib4Value').textContent='—'; $('lensValue').textContent='—';
+  $('fib4Flag').textContent=''; $('lensFlag').textContent='';
+  $('fib4Reference').textContent='Assessment threshold: ≥1.3; ≥2.0 if age >65 years.';
+  $('lensReference').textContent='Supplementary assessment in women: ≥13.9.';
+  $('adviceTitle').textContent='Your results will appear here';
+  $('adviceDetail').textContent=message;
+  $('sourceTag').hidden=true; $('advice').dataset.state='empty';
+}
+function update() {
+  const ready=ids.every(id=>$(id).value.trim()!=='');
+  if(!ready){clearResults();return;}
+  const z=Object.fromEntries(ids.map(id=>[id,Number($(id).value)]));
+  try {
+    const r=evaluate(z);
+    $('fib4Value').textContent=boundaryFormat(r.fib4,r.threshold,2);
+    $('lensValue').textContent=boundaryFormat(r.score,13.9,1);
+    $('fib4Reference').textContent=`Assessment threshold: ≥${r.threshold.toFixed(1)} (age ${z.age>65?'>65':'≤65'} years).`;
+    $('fib4Flag').textContent=r.byFib4?'Threshold met':'Below threshold';
+    $('lensFlag').textContent=z.female===0?'Women-only add-on':r.byLens?'Threshold met':'Below threshold';
+    $('lensReference').textContent='Supplementary assessment in women: ≥13.9.';
+    $('sourceTag').hidden=false;
+    $('sourceTag').textContent=r.source==='Both'?'FIB-4 + LENS':r.source==='Neither'?'No trigger':r.source;
+    $('advice').dataset.state=r.recommend?'recommend':'below';
+    $('adviceTitle').textContent=r.recommend?'Further liver assessment recommended':'Not flagged by this study rule';
+    $('adviceDetail').textContent=r.recommend?'Consider liver elastography or further fibrosis assessment.':'Other clinical indications for assessment still apply.';
+  } catch(e){clearResults(e.message);}
+}
+for(const id of ids){$(id).addEventListener('input',update);$(id).addEventListener('change',update);}
+$('reset').addEventListener('click',()=>{for(const id of ids)$(id).value='';clearResults();$('age').focus();});
+clearResults();
+</script></body></html>
