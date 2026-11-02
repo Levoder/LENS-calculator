@@ -2,6 +2,8 @@
 
 **Liver Evaluation and Navigation for Screening (LENS)** implements the supplementary assessment pathway evaluated in the LENS development and validation study.
 
+Online calculator: https://levoder.github.io/LENS-calculator/
+
 Repository: https://github.com/Levoder/LENS-calculator
 
 Open `index.html` in a browser to use the calculator offline. All calculations run locally in the browser. Entered values are neither transmitted nor stored. This repository contains no individual-level study data.
@@ -24,3 +26,4 @@ This is a research implementation. Its prospective clinical use and effects on p
 Version 1.0.1 (November 2, 2026). Formula and cutoff are unchanged from the verified study implementation. Use a commit permalink to identify the exact version. An offline copy also accompanies the manuscript as Supplement 2.
 
 Maintainer: Levoder.
+
