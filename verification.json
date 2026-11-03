@@ -1,0 +1,12 @@
+{
+  "synthetic_inputs": 1000,
+  "max_probability_error": 4.6074255521944e-15,
+  "source_labels": "passed: FIB-4, LENS, both, neither",
+  "male_rule": "FIB-4 only",
+  "threshold_formatting": "passed",
+  "automatic_input_events": "passed",
+  "invalid_input_and_clear": "passed",
+  "all_English": "passed",
+  "external_requests_and_storage": "none",
+  "browser_visual_review": "Passed during CAP248 update on November 3, 2026"
+}

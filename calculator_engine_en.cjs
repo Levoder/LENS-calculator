@@ -1,6 +1,6 @@
-const MODEL = {"intercept": -9.09683436826056, "log_fib4": 1.27368764195543, "curves": {"age": {"knots": [35, 50, 65, 80], "coefficients": [-0.05122228529699026, 0.05838197431925041, -0.16129439508013282]}, "bmi": {"knots": [15, 30, 40, 65], "coefficients": [0.2844731808862046, -0.18640805405024383, 0.03609690757731788]}, "hba1c": {"knots": [3.5, 6.5, 14], "coefficients": [1.25874340029409, -2.0330885558251235]}}, "method": "Exact algebraic change of spline basis; no refitting"};
+const MODEL = {"intercept": -7.60621883538374, "log_fib4": 1.19657084178006, "curves": {"age": {"knots": [35, 50, 65, 80], "coefficients": [-0.04239511373939431, 0.048074245100168854, -0.11082662467010065]}, "bmi": {"knots": [15, 30, 40, 65], "coefficients": [0.16687540634304518, 0.10523686630108155, -0.7318088799502095]}, "hba1c": {"knots": [3.5, 6.5, 14], "coefficients": [1.2258125145851302, -2.0021142366054576]}}, "method": "Exact algebraic change of spline basis; no refitting"};
 
-const CUTOFF = 0.139;
+const CUTOFF = 0.122;
 function spline(x, spec) {
   const k=spec.knots, c=spec.coefficients, K=k.length, plus=v=>Math.max(v,0)**3;
   let y=c[0]*(x-k[0]);

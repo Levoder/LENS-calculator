@@ -25,11 +25,11 @@ main{max-width:900px;margin:auto}header{display:flex;align-items:center;justify-
 <section class="result lens"><div class="resulthead"><span>LENS score</span><span id="lensFlag" class="flag"></span></div><div id="lensValue" class="score">—</div><p id="lensReference" class="reference"></p></section></div>
 <section id="advice" class="advice" data-state="empty" aria-live="polite"><div class="advicehead"><h2 id="adviceTitle"></h2><span id="sourceTag" class="tag" hidden></span></div><p id="adviceDetail"></p></section>
 <footer><p>LENS: Liver Evaluation and Navigation for Screening. LENS score = LENS-Base probability × 100 (range 0–100).</p>
-<p>For adults with cardiometabolic risk. LENS adds assessment for women; FIB-4 applies to women and men. The model estimates MASLD with elevated liver stiffness (MASLD-ELS: CAP ≥288 dB/m and LSM ≥8 kPa).</p>
+<p>For adults with cardiometabolic risk. LENS adds assessment for women; FIB-4 applies to women and men. The model estimates MASLD with elevated liver stiffness (MASLD-ELS: CAP ≥248 dB/m and LSM ≥8 kPa).</p>
 <p>Reference values are study assessment thresholds, not diagnostic cutoffs. Calculations run locally; entered values are not stored or transmitted.</p></footer>
-</main><script>const MODEL = {"intercept": -9.09683436826056, "log_fib4": 1.27368764195543, "curves": {"age": {"knots": [35, 50, 65, 80], "coefficients": [-0.05122228529699026, 0.05838197431925041, -0.16129439508013282]}, "bmi": {"knots": [15, 30, 40, 65], "coefficients": [0.2844731808862046, -0.18640805405024383, 0.03609690757731788]}, "hba1c": {"knots": [3.5, 6.5, 14], "coefficients": [1.25874340029409, -2.0330885558251235]}}, "method": "Exact algebraic change of spline basis; no refitting"};
+</main><script>const MODEL = {"intercept": -7.60621883538374, "log_fib4": 1.19657084178006, "curves": {"age": {"knots": [35, 50, 65, 80], "coefficients": [-0.04239511373939431, 0.048074245100168854, -0.11082662467010065]}, "bmi": {"knots": [15, 30, 40, 65], "coefficients": [0.16687540634304518, 0.10523686630108155, -0.7318088799502095]}, "hba1c": {"knots": [3.5, 6.5, 14], "coefficients": [1.2258125145851302, -2.0021142366054576]}}, "method": "Exact algebraic change of spline basis; no refitting"};
 
-const CUTOFF = 0.139;
+const CUTOFF = 0.122;
 function spline(x, spec) {
   const k=spec.knots, c=spec.coefficients, K=k.length, plus=v=>Math.max(v,0)**3;
   let y=c[0]*(x-k[0]);
@@ -68,7 +68,7 @@ function clearResults(message='Enter all values to see the results.') {
   $('fib4Value').textContent='—'; $('lensValue').textContent='—';
   $('fib4Flag').textContent=''; $('lensFlag').textContent='';
   $('fib4Reference').textContent='Assessment threshold: ≥1.3; ≥2.0 if age >65 years.';
-  $('lensReference').textContent='Supplementary assessment in women: ≥13.9.';
+  $('lensReference').textContent='Supplementary assessment in women: ≥12.2.';
   $('adviceTitle').textContent='Your results will appear here';
   $('adviceDetail').textContent=message;
   $('sourceTag').hidden=true; $('advice').dataset.state='empty';
@@ -80,11 +80,11 @@ function update() {
   try {
     const r=evaluate(z);
     $('fib4Value').textContent=boundaryFormat(r.fib4,r.threshold,2);
-    $('lensValue').textContent=boundaryFormat(r.score,13.9,1);
+    $('lensValue').textContent=boundaryFormat(r.score,12.2,1);
     $('fib4Reference').textContent=`Assessment threshold: ≥${r.threshold.toFixed(1)} (age ${z.age>65?'>65':'≤65'} years).`;
     $('fib4Flag').textContent=r.byFib4?'Threshold met':'Below threshold';
     $('lensFlag').textContent=z.female===0?'Women-only add-on':r.byLens?'Threshold met':'Below threshold';
-    $('lensReference').textContent='Supplementary assessment in women: ≥13.9.';
+    $('lensReference').textContent='Supplementary assessment in women: ≥12.2.';
     $('sourceTag').hidden=false;
     $('sourceTag').textContent=r.source==='Both'?'FIB-4 + LENS':r.source==='Neither'?'No trigger':r.source;
     $('advice').dataset.state=r.recommend?'recommend':'below';
